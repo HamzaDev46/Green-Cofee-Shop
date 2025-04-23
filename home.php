@@ -16,9 +16,13 @@ include 'components/connection.php';
 <body>
     <?php include 'components/header.php'; ?>
     
-    <main>
-        <!-- Main content would go here -->
-    </main>
+   
+    <div class="main">
+    <?php include 'components/footer.php'; ?>
+    </div>
+   
+    
+    
 
     <!-- Scripts at the bottom for better performance -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
