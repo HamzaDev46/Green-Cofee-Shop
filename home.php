@@ -15,15 +15,73 @@ include 'components/connection.php';
 </head>
 <body>
     <?php include 'components/header.php'; ?>
-    
-   
     <div class="main">
-    <?php include 'components/footer.php'; ?>
+       
+        <section class="home-section">
+            <div class="slider">
+                <div class="slider__slider slider1">
+                    <div class="overlay"></div>
+                    <div class="slide-detail">
+                        <h1>Lorem, ipsum dolor sit</h1>
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore est culpa quo, dolore nam dignissimos architecto.</p>
+                        <a href="view_products.php" class='btn'>shop now</a>
+                    </div>
+                    <div class="hero-dec-top"></div>
+                    <div class="hero-dec-bottom"></div>
+                </div>
+                <!-- Slide End -->
+                <div class="slider__slider slider2">
+                    <div class="overlay"></div>
+                    <div class="slide-detail">
+                        <h1>Welcome to my shop</h1>
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore est culpa quo, dolore nam dignissimos architecto.</p>
+                        <a href="view_products.php" class='btn'>shop now</a>
+                    </div>
+                    <div class="hero-dec-top"></div>
+                    <div class="hero-dec-bottom"></div>
+                </div>
+                <!-- Slide End -->
+                <div class="slider__slider slider3">
+                    <div class="overlay"></div>
+                    <div class="slide-detail">
+                        <h1>Lorem, ipsum dolor sit</h1>
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore est culpa quo, dolore nam dignissimos architecto.</p>
+                        <a href="view_products.php" class='btn'>shop now</a>
+                    </div>
+                    <div class="hero-dec-top"></div>
+                    <div class="hero-dec-bottom"></div>
+                </div>
+                <!-- Slide End -->
+                <div class="slider__slider slider4">
+                    <div class="overlay"></div>
+                    <div class="slide-detail">
+                        <h1>Lorem, ipsum dolor sit</h1>
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore est culpa quo, dolore nam dignissimos architecto.</p>
+                        <a href="view_products.php" class='btn'>shop now</a>
+                    </div>
+                    <div class="hero-dec-top"></div>
+                    <div class="hero-dec-bottom"></div>
+                </div>
+                <!-- Slide End -->
+                <div class="slider__slider slider5">
+                    <div class="overlay"></div>
+                    <div class="slide-detail">
+                        <h1>Lorem, ipsum dolor sit</h1>
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore est culpa quo, dolore nam dignissimos architecto.</p>
+                        <a href="view_products.php" class='btn'>shop now</a>
+                    </div>
+                    <div class="hero-dec-top"></div>
+                    <div class="hero-dec-bottom"></div>
+                </div>
+                <!-- Slide End -->
+                <div class="left-arrow"><i class="bx bxs-left-arrow"></i></div>
+                <div class="right-arrow"><i class="bx bxs-right-arrow"></i></div>
+            </div>
+        </section> 
+         <!-- home slider End -->
+         <?php include 'components/footer.php'; ?>
     </div>
    
-    
-    
-
     <!-- Scripts at the bottom for better performance -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script src="script.js" defer></script>
