@@ -502,6 +502,79 @@ text-align: center;
   left: 30%;
   bottom: -3%;
 }
+.shop-category .box-container {
+  display: flex;
+  gap: 20px; /* adds space between boxes */
+  flex-wrap: wrap; /* ensures responsiveness on smaller screens */
+}
+
+.shop-category .box {
+  position: relative;
+  width: 100%;
+  max-width: 500px; /* optional: to limit width */
+  overflow: hidden; /* prevents content from overflowing */
+  margin-bottom: 2rem;
+}
+
+.shop-category .box img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover; /* ensures image scales nicely */
+}
+
+.shop-category .detail {
+  position: absolute;
+  top: 20%;
+  left: 5%;
+  line-height: 2;
+  text-align: center;
+  color: #fff;
+}
+
+.shop-category .detail h1 {
+  font-size: 2rem;
+}
+
+.shop-category .detail span {
+  font-size: 1.3rem;
+}
+.services{
+  padding: 3rem 0;
+  text-align: center;
+  background-image: url('img/bg.jpg');
+  line-height: 2;
+  margin: 3rem 0;
+}
+.services h3{
+  text-transform: capitalize;
+  color: var(--green);
+}
+.services img{
+  width: 30%;
+}
+.brand {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.brand .box-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 80px; /* increased space between images */
+  flex-wrap: nowrap;
+  overflow-x: auto; /* enables horizontal scrolling if needed */
+  padding: 0 1rem;
+}
+
+.brand .box img {
+  max-height: 120px; /* increased image size */
+  width: auto;
+  display: block;
+}
+
+
 /*------------------footer------------------*/
 /* -------- Footer Section -------- */
 .top-footer {
