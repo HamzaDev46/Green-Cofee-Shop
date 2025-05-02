@@ -108,6 +108,38 @@ include 'components/connection.php';
                 </div>
             </div>
           </div>
+        <div class="testimonial-container">
+            <div class="title">
+                <img src="img/download.png" alt="" class="logo">
+                <h1>what our customers say</h1>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolorum assumenda vitae quae maxime molestiae magnam?</p>
+            </div>  
+                <div class="container">
+                    <div class="testimonial-item active">
+                        <img src="img/01.jpg" alt="">
+                        <h1>sara smith</h1>
+                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
+                            Quas qui velit earum dolorum enim consectetur sit maiores delectus fugiat voluptatum!
+                        </p>
+                    </div>
+                    <div class="testimonial-item ">
+                        <img src="img/02.jpg" alt="">
+                        <h1>john smith</h1>
+                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
+                            Quas qui velit earum dolorum enim consectetur sit maiores delectus fugiat voluptatum!
+                        </p>
+                    </div>
+                    <div class="testimonial-item ">
+                        <img src="img/03.jpg" alt="">
+                        <h1>salena ansari</h1>
+                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
+                            Quas qui velit earum dolorum enim consectetur sit maiores delectus fugiat voluptatum!
+                        </p>
+                    </div>
+                    <div class="left-arrow" onclick="nextSlide()"><i class='bx bxs-left-arrow-alt'></i></div>
+                    <div class="right-arrow" onclick="prevSlide()"><i class='bx bxs-right-arrow-alt'></i></div>
+                </div>    
+       </div>
          <?php include 'components/footer.php'; ?>
     </div>
    
@@ -115,5 +147,21 @@ include 'components/connection.php';
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script src="script.js" defer></script>
     <?php include 'components/alert.php'; ?>
+    <script>
+        let slides = document.querySelectorAll('.testimonial-item');
+        let index = 0;
+
+        function nextSlide() {
+        slides[index].classList.remove('active');
+        index = (index + 1) % slides.length;
+        slides[index].classList.add('active');
+        }
+
+        function prevSlide() {
+        slides[index].classList.remove('active');
+        index = (index - 1 + slides.length) % slides.length;
+        slides[index].classList.add('active');
+        }
+    </script>
 </body>
 </html>

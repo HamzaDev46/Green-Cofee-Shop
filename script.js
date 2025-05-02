@@ -66,3 +66,5 @@ slider.addEventListener('click', function (ev) {
     resetTimer();
   }
 });
+
+//testimonial slider
