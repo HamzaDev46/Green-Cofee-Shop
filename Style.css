@@ -666,7 +666,7 @@ box-shadow: var(--box-shadow);
 }
 @keyframes slideContent{
   0%{
-    transform: scale(1.0);
+    transform: rotateY(180deg);
     opacity: 0;
   }
 }
@@ -708,6 +708,148 @@ box-shadow: var(--box-shadow);
 .testimonial-container .container .right-arrow{
   right: 3rem;
 }
+/* -------- Contact Section -------- */
+
+.form-container {
+  background-color: rgba(255, 255, 255, 0.8); /* Slight transparency */
+  padding: 30px;
+  max-width: 700px;       /* Increased width */
+  width: 90%;             /* More flexible responsiveness */
+  border-radius: 16px;
+  margin: 2rem auto;      /* Centered horizontally */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+
+.title {
+  text-align: center;
+  margin-bottom: 25px;
+}
+.title p{
+  color: var(--green);
+}
+.title img.logo {
+  width: 60px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.title h1 {
+  font-size: 24px;
+  color: #333;
+  text-transform: capitalize;
+}
+
+.input-field {
+  margin-bottom: 20px;
+}
+
+.input-field p {
+  font-size: 14px;
+  font-weight: 600;
+  color:var(--green);
+  margin-bottom: 6px;
+}
+
+
+
+.input-field input,
+.input-field textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f9f9f9;
+  font-size: 14px;
+  transition: border 0.3s ease;
+}
+
+.input-field input:focus,
+.input-field textarea:focus {
+  border-color: var(--green);
+  outline: none;
+  background: #fff;
+}
+
+.input-field textarea {
+  height: 120px;
+  resize: vertical;
+}
+
+.address {
+  background-image: url('img/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 4rem 2rem;
+  min-height: 50vh;
+  color: #222121;
+}
+
+.address .title {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+
+
+.address .title h1 {
+  font-size: 28px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #090909;
+}
+
+.box-1-container {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.box-1 {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 260px;
+  max-width: 320px;
+  box-shadow: var(--box-shadow);
+  transition: transform 0.3s ease;
+  color: #000;
+  margin: 1rem; /* Add space around each box */
+}
+
+
+.box-1:hover {
+  transform: translateY(-5px);
+}
+
+.box-1 i {
+  font-size: 2rem;
+  color: #ffcc00;
+  background-color: var(--green);
+  height: auto;
+  border-radius: 50%;
+  padding: .5rem;
+}
+
+.box-1 h4 {
+  font-size: 18px;
+  margin-bottom: 4px;
+  color: #0d0c0c;
+  text-transform: capitalize;
+}
+
+.box-1 p {
+  font-size: 14px;
+  color: #100f0f;
+  margin: 0;
+}
+
+
+
 /* -------- Footer Section -------- */
 .top-footer {
   width: 100%;

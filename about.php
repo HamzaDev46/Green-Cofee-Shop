@@ -1,5 +1,16 @@
 <?php
 include 'components/connection.php';
+session_start();
+if(isset($_SESSION['user_id'])){
+    $user_id = $_SESSION['user_id'];
+}
+else{
+    $user_id = '';
+}
+if(isset($_POST['logout'])){
+    session_destroy();
+    header('location:login.php');
+}
 ?>
 <style type="text/css">
      <?php include 'Style.css'; ?>
@@ -132,6 +143,13 @@ include 'components/connection.php';
                     <div class="testimonial-item ">
                         <img src="img/03.jpg" alt="">
                         <h1>salena ansari</h1>
+                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
+                            Quas qui velit earum dolorum enim consectetur sit maiores delectus fugiat voluptatum!
+                        </p>
+                    </div>
+                    <div class="testimonial-item ">
+                        <img src="img/04.png" alt="" height="140px">
+                        <h1>Marina ansari</h1>
                         <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
                             Quas qui velit earum dolorum enim consectetur sit maiores delectus fugiat voluptatum!
                         </p>

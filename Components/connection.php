@@ -2,13 +2,14 @@
 $db_name='mysql:host=localhost;dbname=shop_db';
 $db_user='root';
 $db_password='';
-$connection = new PDO($db_name, $db_user, $db_password);
+$conn = new PDO($db_name, $db_user, $db_password);
+
 
 // if ($connection) {
 //     echo "Connected to the database successfully!";
 // }
 
-function unique_id() {
+function unique_id($length = 20) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString = '';
@@ -17,4 +18,5 @@ function unique_id() {
     }
     return $randomString;
 }
+
 ?>
