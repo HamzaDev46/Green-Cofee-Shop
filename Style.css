@@ -956,6 +956,7 @@ text-transform: capitalize;
 .products .cart-total p span{
   color: var(--green);
 }
+
 /* -------- Footer Section -------- */
 .top-footer {
   width: 100%;
@@ -975,6 +976,69 @@ text-transform: capitalize;
 .top-footer input {
   width: 40vw;
 }
+/* ---------- View Product Page Styles ---------- */
+.view_page {
+    padding: 5% 8%;
+    background-image: url('img/bg.jpg');
+
+}
+
+.view_page form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(35px, 1fr));
+    justify-content: center;
+    align-items: center;
+    margin-left: 1rem;
+    background: #fff;
+    box-shadow: var(--box-shadow);
+    padding: 1.5rem;
+    
+}
+/* ---------- Product View Page Image Styling ---------- */
+.view_page form img {
+    padding: 0.5rem;
+    box-shadow: var(--box-shadow);
+}
+
+/* ---------- Product Name Styling ---------- */
+.view_page form .name {
+    font-size: 2rem;
+    text-transform: capitalize;
+    color: var(--green);
+}
+
+/* ---------- Product Price Styling ---------- */
+.view_page form .price {
+    font-size: 24px;
+    line-height: 1;
+}
+
+/* ---------- Product Detail Styling ---------- */
+.view_page form .detail {
+    font-size: 16px;
+    color: gray;
+    line-height: 2;
+    margin-bottom: 0.5rem;
+}
+
+/* ---------- Button Styling ---------- */
+.view_page .btn {
+    background: var(--light-green);
+    cursor: pointer;
+}
+
+/* ---------- Cart Total Button Container ---------- */
+.cart-total .button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ---------- Cart Total Buttons Margin ---------- */
+.cart-total .button .btn {
+    margin: 1rem;
+}
+
 
 /* -------- Footer Styling -------- */
 footer {
