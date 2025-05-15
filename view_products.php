@@ -1,6 +1,6 @@
-<?php
-include 'components/connection.php';
-session_start();
+<?php 
+include 'components/connection.php'; 
+session_start();  
 
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
@@ -18,30 +18,34 @@ if (isset($_POST['logout'])) {
 // Add to Wishlist
 // =====================
 if (isset($_POST['add_to_wishlist'])) {
-    $id = unique_id();
-    $product_id = $_POST['product_id'];
-
-    // Check if already in wishlist
-    $verify_wishlist = $conn->prepare("SELECT * FROM `wishlist` WHERE user_id = ? AND product_id = ?");
-    $verify_wishlist->execute([$user_id, $product_id]);
-
-    // Check if already in cart
-    $check_cart = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ? AND product_id = ?");
-    $check_cart->execute([$user_id, $product_id]);
-
-    if ($verify_wishlist->rowCount() > 0) {
-        $warning_msg[] = 'Already added to wishlist!';
-    } elseif ($check_cart->rowCount() > 0) {
-        $warning_msg[] = 'Already added to cart!';
+    if ($user_id == '') {
+        $warning_msg[] = 'Please log in to use the wishlist!';
     } else {
-        $select_product = $conn->prepare("SELECT * FROM `products` WHERE id = ? LIMIT 1");
-        $select_product->execute([$product_id]);
-        $fetch_product = $select_product->fetch(PDO::FETCH_ASSOC);
+        $id = unique_id();
+        $product_id = $_POST['product_id'];
 
-        $insert_wishlist = $conn->prepare("INSERT INTO `wishlist`(id, user_id, product_id, price) VALUES (?, ?, ?, ?)");
-        $insert_wishlist->execute([$id, $user_id, $product_id, $fetch_product['price']]);
+        // Check if already in wishlist
+        $verify_wishlist = $conn->prepare("SELECT * FROM `wishlist` WHERE user_id = ? AND product_id = ?");
+        $verify_wishlist->execute([$user_id, $product_id]);
 
-        $success_msg[] = 'Product added to wishlist successfully!';
+        // Check if already in cart
+        $check_cart = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ? AND product_id = ?");
+        $check_cart->execute([$user_id, $product_id]);
+
+        if ($verify_wishlist->rowCount() > 0) {
+            $warning_msg[] = 'Already added to wishlist!';
+        } elseif ($check_cart->rowCount() > 0) {
+            $warning_msg[] = 'Already added to cart!';
+        } else {
+            $select_product = $conn->prepare("SELECT * FROM `products` WHERE id = ? LIMIT 1");
+            $select_product->execute([$product_id]);
+            $fetch_product = $select_product->fetch(PDO::FETCH_ASSOC);
+
+            $insert_wishlist = $conn->prepare("INSERT INTO `wishlist`(id, user_id, product_id, price) VALUES (?, ?, ?, ?)");
+            $insert_wishlist->execute([$id, $user_id, $product_id, $fetch_product['price']]);
+
+            $success_msg[] = 'Product added to wishlist successfully!';
+        }
     }
 }
 
@@ -49,52 +53,51 @@ if (isset($_POST['add_to_wishlist'])) {
 // Add to Cart
 // =====================
 if (isset($_POST['add_to_cart'])) {
-    $id = unique_id();
-    $product_id = $_POST['product_id'];
-    $qty_raw = $_POST['qty'] ?? '1';
-
-    // Sanitize and validate quantity
-    $qty_sanitized = filter_var($qty_raw, FILTER_SANITIZE_NUMBER_INT);
-    $qty = filter_var($qty_sanitized, FILTER_VALIDATE_INT);
-
-    if ($qty === false || $qty < 1) {
-        $warning_msg[] = 'Please enter a valid quantity.';
+    if ($user_id == '') {
+        $warning_msg[] = 'Please log in to add items to cart!';
     } else {
-        // Check if already in wishlist (optional logic, can be removed if unnecessary)
-        $verify_wishlist = $conn->prepare("SELECT * FROM `wishlist` WHERE user_id = ? AND product_id = ?");
-        $verify_wishlist->execute([$user_id, $product_id]);
+        $id = unique_id();
+        $product_id = $_POST['product_id'];
+        $qty_raw = $_POST['qty'] ?? '1';
 
-        // Check total items in cart
-        $max_cart_items = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
-        $max_cart_items->execute([$user_id]);
+        $qty_sanitized = filter_var($qty_raw, FILTER_SANITIZE_NUMBER_INT);
+        $qty = filter_var($qty_sanitized, FILTER_VALIDATE_INT);
 
-        // Check if product already in cart
-        $check_cart_item = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ? AND product_id = ?");
-        $check_cart_item->execute([$user_id, $product_id]);
-
-        if ($check_cart_item->rowCount() > 0) {
-            $warning_msg[] = 'Product already in cart!';
-        } elseif ($max_cart_items->rowCount() > 20) {
-            $warning_msg[] = 'Cart is full!';
+        if ($qty === false || $qty < 1) {
+            $warning_msg[] = 'Please enter a valid quantity.';
         } else {
-            $select_product = $conn->prepare("SELECT * FROM `products` WHERE id = ? LIMIT 1");
-            $select_product->execute([$product_id]);
-            $fetch_product = $select_product->fetch(PDO::FETCH_ASSOC);
+            $verify_wishlist = $conn->prepare("SELECT * FROM `wishlist` WHERE user_id = ? AND product_id = ?");
+            $verify_wishlist->execute([$user_id, $product_id]);
 
-            $insert_cart = $conn->prepare("INSERT INTO `cart`(id, user_id, product_id, price, qty) VALUES (?, ?, ?, ?, ?)");
-            $insert_cart->execute([$id, $user_id, $product_id, $fetch_product['price'], $qty]);
+            $max_cart_items = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
+            $max_cart_items->execute([$user_id]);
 
-            $success_msg[] = 'Product added to cart successfully!';
+            $check_cart_item = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ? AND product_id = ?");
+            $check_cart_item->execute([$user_id, $product_id]);
+
+            if ($check_cart_item->rowCount() > 0) {
+                $warning_msg[] = 'Product already in cart!';
+            } elseif ($max_cart_items->rowCount() > 20) {
+                $warning_msg[] = 'Cart is full!';
+            } else {
+                $select_product = $conn->prepare("SELECT * FROM `products` WHERE id = ? LIMIT 1");
+                $select_product->execute([$product_id]);
+                $fetch_product = $select_product->fetch(PDO::FETCH_ASSOC);
+
+                $insert_cart = $conn->prepare("INSERT INTO `cart`(id, user_id, product_id, price, qty) VALUES (?, ?, ?, ?, ?)");
+                $insert_cart->execute([$id, $user_id, $product_id, $fetch_product['price'], $qty]);
+
+                $success_msg[] = 'Product added to cart successfully!';
+            }
         }
     }
 }
 ?>
 
-?>
 <style type="text/css">
-     <?php include 'Style.css'; ?>
-    
+    <?php include 'Style.css'; ?>
 </style>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -104,61 +107,65 @@ if (isset($_POST['add_to_cart'])) {
     <title>Green Coffee - Shop Page</title>
     <style>
         .img {
-    width: 225px;
-    height: 225px;
-    object-fit: cover; /* ensures the image fills the area without distortion */
-    border-radius: 10px; /* optional styling */
-}
-
+            width: 225px;
+            height: 225px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
-    <?php include 'components/header.php'; ?>
-    <div class="main">
-         <div class="banner">
-            <h1>Shop</h1>
-        </div>
-        <div class="title2">
-         <a href="home.php">home</a><span>our shop</span>
-        </div>
-       <section class='products'>
-            <div class="box-container">
-                <?php
-                    $select_products = $conn->prepare("SELECT * FROM `products`");
-                    $select_products->execute();
-                    if($select_products->rowCount() > 0){
-                        while($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)){
-                      
-                ?>
-                <form action="" method="post" class="box">
-                  
+<?php include 'components/header.php'; ?>
+
+<div class="main">
+    <div class="banner">
+        <h1>Shop</h1>
+    </div>
+    <div class="title2">
+        <a href="home.php">home</a><span>our shop</span>
+    </div>
+
+    <section class='products'>
+        <div class="box-container">
+            <?php
+            $select_products = $conn->prepare("SELECT * FROM `products`");
+            $select_products->execute();
+            if ($select_products->rowCount() > 0) {
+                while ($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)) {
+                    ?>
+                    <form action="" method="post" class="box">
                         <img src="img/<?= $fetch_product['image']; ?>" alt="" class="img">
-                       <div class="button">
-                        <button type='submit' name='add_to_cart'><i class='bx bx-cart'></i></button>
-                        <button type='submit' name='add_to_wishlist'><i class='bx bx-heart'></i></button>
-                         <a href="view_page.php?pid=<?php echo $fetch_product['id']; ?>" class='bx bxs-show'></a>
-                       </div>
-                    <h3 class='name'><?=$fetch_product['name']; ?></h3>
-                    <input type="hidden" name="product_id" value="<?=$fetch_product['id']; ?>">
-                    <div class="flex">
-                        <p class="price">price $<?=$fetch_product['price']; ?>/-</p>
-                        <input type="number" name='qty' required min="1" max="99" maxlength="2" class="qty" >
-                    </div>
-                    <a href="checkout.php?get_id=<?=$fetch_product['id'];?>" class='btn'>buy now</a>
-                </form>
-                <?php
-                      }
-                    }else{
-                        echo '<p class="empty">no products added yet!</p>';
-                    }
-                ?>
-                
-            </div>
-       </section>
-   
-    <!-- Scripts at the bottom for better performance -->
+                        <div class="button">
+                            <?php if ($user_id != ''): ?>
+                                <button type='submit' name='add_to_cart'><i class='bx bx-cart'></i></button>
+                                <button type='submit' name='add_to_wishlist'><i class='bx bx-heart'></i></button>
+                            <?php else: ?>
+                                <a href="login.php" class='bx bx-cart'></a>
+                                <a href="login.php" class='bx bx-heart'></a>
+                            <?php endif; ?>
+                            <a href="view_page.php?pid=<?= $fetch_product['id']; ?>" class='bx bxs-show'></a>
+                        </div>
+                        <h3 class='name'><?= $fetch_product['name']; ?></h3>
+                        <input type="hidden" name="product_id" value="<?= $fetch_product['id']; ?>">
+                        <div class="flex">
+                            <p class="price">price $<?= $fetch_product['price']; ?>/-</p>
+                            <input type="number" name='qty' required min="1" max="99" maxlength="2" class="qty">
+                        </div>
+                        <a href="checkout.php?get_id=<?= $fetch_product['id']; ?>" class='btn'>buy now</a>
+                    </form>
+                    <?php
+                }
+            } else {
+                echo '<p class="empty">no products added yet!</p>';
+            }
+            ?>
+        </div>
+        <?php include 'components/footer.php'; ?>
+    </section>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script src="script.js" defer></script>
     <?php include 'components/alert.php'; ?>
+</div>
 </body>
 </html>

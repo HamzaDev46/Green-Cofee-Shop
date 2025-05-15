@@ -957,25 +957,7 @@ text-transform: capitalize;
   color: var(--green);
 }
 
-/* -------- Footer Section -------- */
-.top-footer {
-  width: 100%;
-  background: var(--green);
-  padding: 1rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  color: #fff;
-}
 
-.top-footer h2 i {
-  margin-right: 0.5rem;
-}
-
-.top-footer input {
-  width: 40vw;
-}
 /* ---------- View Product Page Styles ---------- */
 .view_page {
     padding: 5% 8%;
@@ -1038,8 +1020,54 @@ text-transform: capitalize;
 .cart-total .button .btn {
     margin: 1rem;
 }
+/* ----------wishlist page ---------- */
+ .products .product-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 0.5rem 0;
+    background-color: #f0ffe0;
+    padding: 0.5rem;
+    border-radius: 12px;
+}
 
+.products .product-actions button,
+.products .product-actions a {
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 0.5rem 0.6rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s ease;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+.products .product-actions button:hover,
+.products .product-actions a:hover {
+    background: #e0f7d9;
+    transform: scale(1.05);
+}/* -------- Footer Section -------- */
+.top-footer {
+  width: 100%;
+  background: var(--green);
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+}
+
+.top-footer h2 i {
+  margin-right: 0.5rem;
+}
+
+.top-footer input {
+  width: 40vw;
+}
 /* -------- Footer Styling -------- */
 footer {
   background-image: url('img/0.webp');
