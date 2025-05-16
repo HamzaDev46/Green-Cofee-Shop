@@ -921,12 +921,15 @@ box-shadow: var(--box-shadow);
   border-radius: .5rem;
   font-size: 1.7rem;
   color: #fff;
-  height: 3.5rem;
+  height: 2.7rem;
   width: 4.5rem;
   cursor: pointer;
+  margin-left: .5rem;
+  background-color: var(--green);
 }
 .products .box-container .box .flex .fa-edit:hover{
-  background: var(--green);
+  background: var(--lightgreen);
+  color: #000;
 }
 .products .box-container .box .sub-total{
   padding-bottom: 1rem;
@@ -1049,7 +1052,24 @@ text-transform: capitalize;
 .products .product-actions a:hover {
     background: #e0f7d9;
     transform: scale(1.05);
-}/* -------- Footer Section -------- */
+}
+/* ---------- Cart Page ---------- */
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #28a745;
+    margin-left: 5px;
+    transition: transform 0.2s;
+}
+
+.icon-btn:hover {
+    transform: scale(1.2);
+    color: #218838;
+}
+
+/* -------- Footer Section -------- */
 .top-footer {
   width: 100%;
   background: var(--green);

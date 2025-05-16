@@ -149,7 +149,8 @@ if (isset($_POST['add_to_cart'])) {
                         <input type="hidden" name="product_id" value="<?= $fetch_product['id']; ?>">
                         <div class="flex">
                             <p class="price">price $<?= $fetch_product['price']; ?>/-</p>
-                            <input type="number" name='qty' required min="1" max="99" maxlength="2" class="qty">
+                            <input type="number" name="qty" min="1" max="99" value="1" class="qty" maxlength="2" required>
+
                         </div>
                         <a href="checkout.php?get_id=<?= $fetch_product['id']; ?>" class='btn'>buy now</a>
                     </form>
