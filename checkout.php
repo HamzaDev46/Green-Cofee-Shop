@@ -10,41 +10,55 @@ if (isset($_POST['logout'])) {
     exit;
 }
 
-if (isset($_POST['add_to_cart'])) {
-    if ($user_id === '') {
-        $warning_msg[] = 'Please log in to add items to cart!';
+if (isset($_POST['place_order'])) {
+    $name = filter_var($_POST['name'], FILTER_UNSAFE_RAW);
+    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+    $phone = filter_var($_POST['phone'], FILTER_UNSAFE_RAW);
+    $address = filter_var($_POST['flat'] . ", " . $_POST['street'] . ", " . $_POST['city'] . ", " . $_POST['state'] . ", " . $_POST['zip'], FILTER_UNSAFE_RAW);
+    $address_type = filter_var($_POST['address_type'], FILTER_UNSAFE_RAW);
+    $payment_method = filter_var($_POST['payment_method'], FILTER_UNSAFE_RAW);
+
+    if (isset($_GET['get_id'])) {
+        $get_product = $conn->prepare("SELECT * FROM `products` WHERE id = ? LIMIT 1");
+        $get_product->execute([$_GET['get_id']]);
+
+        if ($get_product->rowCount() > 0) {
+            $fetch_p = $get_product->fetch(PDO::FETCH_ASSOC);
+            $insert_order = $conn->prepare("INSERT INTO `orders` (id, user_id, name, number, email, address, address_type, method, product_id, price, qty) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $insert_order->execute([
+                uniqid(), $user_id, $name, $phone, $email, $address, $address_type, $payment_method,
+                $fetch_p['id'], $fetch_p['price'], 1
+            ]);
+        }
     } else {
-        $id = unique_id();
-        $product_id = $_POST['product_id'];
-        $qty = filter_var($_POST['qty'], FILTER_VALIDATE_INT);
+        // Place order for all items in the cart
+        $cart_query = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
+        $cart_query->execute([$user_id]);
 
-        if ($qty === false || $qty < 1) {
-            $warning_msg[] = 'Please enter a valid quantity.';
-        } else {
-            $check_cart_item = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ? AND product_id = ?");
-            $check_cart_item->execute([$user_id, $product_id]);
+        while ($cart = $cart_query->fetch(PDO::FETCH_ASSOC)) {
+            $product_query = $conn->prepare("SELECT * FROM `products` WHERE id = ?");
+            $product_query->execute([$cart['product_id']]);
+            $product = $product_query->fetch(PDO::FETCH_ASSOC);
 
-            $max_cart_items = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
-            $max_cart_items->execute([$user_id]);
-
-            if ($check_cart_item->rowCount() > 0) {
-                $warning_msg[] = 'Product already in cart!';
-            } elseif ($max_cart_items->rowCount() >= 20) {
-                $warning_msg[] = 'Cart is full!';
-            } else {
-                $select_product = $conn->prepare("SELECT * FROM `products` WHERE id = ? LIMIT 1");
-                $select_product->execute([$product_id]);
-                $fetch_product = $select_product->fetch(PDO::FETCH_ASSOC);
-
-                $insert_cart = $conn->prepare("INSERT INTO `cart`(id, user_id, product_id, price, qty) VALUES (?, ?, ?, ?, ?)");
-                $insert_cart->execute([$id, $user_id, $product_id, $fetch_product['price'], $qty]);
-
-                $success_msg[] = 'Product added to cart successfully!';
+            if ($product) {
+                $insert_order = $conn->prepare("INSERT INTO `orders` (id, user_id, name, number, email, address, address_type, method, product_id, price, qty) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $insert_order->execute([
+                    uniqid(), $user_id, $name, $phone, $email, $address, $address_type, $payment_method,
+                    $product['id'], $product['price'], $cart['qty']
+                ]);
             }
         }
+
+        // Optionally, clear the cart after placing order
+        $clear_cart = $conn->prepare("DELETE FROM `cart` WHERE user_id = ?");
+        $clear_cart->execute([$user_id]);
     }
+
+    header('location:order.php');
+    exit;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -67,76 +81,131 @@ if (isset($_POST['add_to_cart'])) {
             <img src="img/download.png" alt="" class="logo">
             <h1>Checkout Summary</h1>
             <p>Review your order details before proceeding to payment.</p>
-       </div>
-            <div class="row">
-                <form  method="post">
-                    <h3>billing details</h3>
-                    <div class="flex">
-                        <div class="box">
-                            <div class="input-feld">
-                                <p>your name <span>*</span></p>
-                                <input type="text" name="name" required maxlength='50' placeholder="Enter your name" class="input">
-                            </div>
-                            <div class="input-feld">
-                                <p>your email <span>*</span></p>
-                                <input type="email" name="email" required maxlength='50' placeholder="Enter your email" class="input">
-                            </div>
-                            <div class="input-feld">
-                                <p>your phone <span>*</span></p>
-                                <input type="tel" name="phone" required maxlength='15' placeholder="Enter your phone number" class="input">
-                            </div>
-                            
-                            <div class="input-feld">
-                                <p>payment method <span>*</span></p>
-                                <select name="payment_method" required class="input">
-                                    <option value="" disabled selected>Select payment method</option>
-                                    <option value="cash on delivery">Cash on Delivery</option>
-                                    <option value="credit card">Credit Card</option>
-                                    <option value="paypal">PayPal</option>
-                                </select>
-                            </div>
-                            <div class="input-feld">
-                                <p>address type <span>*</span></p>
-                                <select name="address_type" required class="input">
-                                    <option value="" disabled selected>Select address type</option>
-                                    <option value="home">Home</option>
-                                    <option value="office">Office</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
-                       </div>
-                       <div class="box">
-                           <div class="input-feld">
-                                <p>address line 01 <span>*</span></p>
-                                <input type="text" name="flat" required maxlength='50' placeholder="Enter your flat & building no" class="input">
-                            </div>
-                            <div class="input-feld">
-                                <p>address line 02 <span>*</span></p>
-                                <input type="text" name="street" required maxlength='50' placeholder="Enter your street & area" class="input">
-                            </div>
-                            <div class="input-feld">
-                                <p>city name <span>*</span></p>
-                                <input type="text" name="city" required maxlength='50' placeholder="Enter your city" class="input">
-                            </div>
-                            <div class="input-feld">
-                                <p>state name <span>*</span></p>
-                                <input type="text" name="state" required maxlength='50' placeholder="Enter your state" class="input">
-                            </div>
-                            <div class="input-feld">
-                                <p>zip code <span>*</span></p>
-                                <input type="text" name="zip" required maxlength='6' placeholder="Enter your zip code" min='0' max='999999' class="input">
-                            </div>
+        </div>
+        <div class="row">
+            <form method="post">
+                <h3>Billing Details</h3>
+                <div class="flex">
+                    <div class="box">
+                        <div class="input-feld">
+                            <p>Your Name <span>*</span></p>
+                            <input type="text" name="name" required maxlength='50' placeholder="Enter your name" class="input">
+                        </div>
+                        <div class="input-feld">
+                            <p>Your Email <span>*</span></p>
+                            <input type="email" name="email" required maxlength='50' placeholder="Enter your email" class="input">
+                        </div>
+                        <div class="input-feld">
+                            <p>Your Phone <span>*</span></p>
+                            <input type="tel" name="phone" required maxlength='15' placeholder="Enter your phone number" class="input">
+                        </div>
+                        <div class="input-feld">
+                            <p>Payment Method <span>*</span></p>
+                            <select name="payment_method" required class="input">
+                                <option value="" disabled selected>Select payment method</option>
+                                <option value="cash on delivery">Cash on Delivery</option>
+                                <option value="credit card">Credit Card</option>
+                                <option value="paypal">PayPal</option>
+                            </select>
+                        </div>
+                        <div class="input-feld">
+                            <p>Address Type <span>*</span></p>
+                            <select name="address_type" required class="input">
+                                <option value="" disabled selected>Select address type</option>
+                                <option value="home">Home</option>
+                                <option value="office">Office</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                   </div>
+                   <div class="box">
+                        <div class="input-feld">
+                            <p>Address Line 01 <span>*</span></p>
+                            <input type="text" name="flat" required maxlength='50' placeholder="Enter your flat & building no" class="input">
+                        </div>
+                        <div class="input-feld">
+                            <p>Address Line 02 <span>*</span></p>
+                            <input type="text" name="street" required maxlength='50' placeholder="Enter your street & area" class="input">
+                        </div>
+                        <div class="input-feld">
+                            <p>City Name <span>*</span></p>
+                            <input type="text" name="city" required maxlength='50' placeholder="Enter your city" class="input">
+                        </div>
+                        <div class="input-feld">
+                            <p>State Name <span>*</span></p>
+                            <input type="text" name="state" required maxlength='50' placeholder="Enter your state" class="input">
+                        </div>
+                        <div class="input-feld">
+                            <p>ZIP Code <span>*</span></p>
+                            <input type="text" name="zip" required maxlength='6' placeholder="Enter your zip code" class="input">
                         </div>
                     </div>
-                    <div class="btn">
-                        <button type="submit" class="btn">Place Order</button>
+                </div>
+                <div class="btn">
+                    <button type="submit" class="btn" name="place_order">Place Order</button>
+                </div>
+            </form>
+
+            <div class="summary">
+                <h3>My Bag</h3>
+                <div class="box-container">
+                <?php
+                $grand_total = 0;
+
+                if (isset($_GET['get_id'])) {
+                    $select_get = $conn->prepare("SELECT * FROM `products` WHERE id = ?");
+                    $select_get->execute([$_GET['get_id']]);
+
+                    while ($fetch_get = $select_get->fetch(PDO::FETCH_ASSOC)) {
+                        $sub_total = $fetch_get['price'];
+                        $grand_total += $sub_total;
+                ?>
+                    <div class="flex">
+                        <img src="img/<?= $fetch_get['image'] ?>" alt="" class="image">
+                        <div>
+                            <h3 class='name'><?= $fetch_get['name'] ?></h3>
+                            <p class="price"><?= $fetch_get['price'] ?>/-</p>
+                        </div>
                     </div>
-                </form>
-                <div class="summary">
-                    
+                <?php
+                    }
+                } else {
+                    $select_cart = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
+                    $select_cart->execute([$user_id]);
+
+                    if ($select_cart->rowCount() > 0) {
+                        while ($fetch_cart = $select_cart->fetch(PDO::FETCH_ASSOC)) {
+                            $select_product = $conn->prepare("SELECT * FROM `products` WHERE id = ?");
+                            $select_product->execute([$fetch_cart['product_id']]);
+                            $fetch_product = $select_product->fetch(PDO::FETCH_ASSOC);
+
+                            if ($fetch_product) {
+                                $sub_total = $fetch_product['price'] * $fetch_cart['qty'];
+                                $grand_total += $sub_total;
+                ?>
+                    <div class="flex">
+                        <img src="img/<?= $fetch_product['image'] ?>" alt="" class="image">
+                        <div>
+                            <h3 class='name'><?= $fetch_product['name'] ?></h3>
+                            <p class="price"><?= $fetch_product['price'] ?> x <?= $fetch_cart['qty'] ?> = <?= $sub_total ?>/-</p>
+                        </div>
+                    </div>
+                <?php
+                            }
+                        }
+                    } else {
+                        $warning_msg[] = "<p>Your cart is empty.</p>";
+                    }
+                }
+                ?>
+                </div>
+               <div class="cart-total">
+                        <h3>Total amount to be paid:</h3>
+                        <p>PKR/<?= $grand_total ?>/-</p>
                 </div>
             </div>
-   </section>
+        </div>
+    </section>
 
     <?php include 'components/footer.php'; ?>
 </div>
@@ -144,5 +213,5 @@ if (isset($_POST['add_to_cart'])) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script src="script.js" defer></script>
 <?php include 'components/alert.php'; ?>
-</body>
+</body> 
 </html>

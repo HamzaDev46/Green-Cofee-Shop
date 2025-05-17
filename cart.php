@@ -108,20 +108,25 @@ if (isset($_POST['update_cart'])) {
             endif;
             ?>
         </div>
-       <?php if ($grand_total != 0): ?>
-                    <div class="cart-total">
-                        <p>Total Amount Payable: <span>PKR <?= $grand_total; ?>/-</span></p>
-                        <div class="button">
-                            <form method="post">
-                                <button type="submit" name="empty_cart" class="btn" 
-                                    onclick="return confirm('Are you sure you want to empty your cart?')">
-                                    Empty Cart
-                                </button>
-                            </form>
-                            <a href="checkout.php" class="btn">Proceed to Checkout</a>
-                        </div>
-                    </div>
-        <?php endif; ?>
+    <?php if ($grand_total != 0): ?>
+    <div class="cart-total">
+        <div class="total-text">
+            <p>Total Amount Payable: <span>PKR <?= $grand_total; ?>/-</span></p>
+        </div>
+        <div class="button-group">
+            <form method="post" style="display:inline;">
+                <button type="submit" name="empty_cart" class="btn" 
+                        onclick="return confirm('Are you sure you want to empty your cart?')">
+                    Empty Cart
+                </button>
+            </form>
+            <a href="checkout.php" class="btn">Proceed to Checkout</a>
+        </div>
+    </div>
+<?php endif; ?>
+
+
+
 
     </section>
 
