@@ -11,53 +11,62 @@ if (isset($_POST['logout'])) {
 }
 
 if (isset($_POST['place_order'])) {
+
     $name = filter_var($_POST['name'], FILTER_UNSAFE_RAW);
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $phone = filter_var($_POST['phone'], FILTER_UNSAFE_RAW);
-    $address = filter_var($_POST['flat'] . ", " . $_POST['street'] . ", " . $_POST['city'] . ", " . $_POST['state'] . ", " . $_POST['zip'], FILTER_UNSAFE_RAW);
+    $number = filter_var($_POST['phone'], FILTER_UNSAFE_RAW);
+    $email = filter_var($_POST['email'], FILTER_UNSAFE_RAW);
+
+    $address = filter_var($_POST['flat'] . ', ' . $_POST['street'] . ', ' . $_POST['city'] . ', ' . $_POST['state'] . ' - ' . $_POST['zip'], FILTER_UNSAFE_RAW);
     $address_type = filter_var($_POST['address_type'], FILTER_UNSAFE_RAW);
-    $payment_method = filter_var($_POST['payment_method'], FILTER_UNSAFE_RAW);
+    $method = filter_var($_POST['payment_method'], FILTER_UNSAFE_RAW);
+
+    $verify_cart = $conn->prepare("SELECT * FROM `cart` WHERE user_id=?");
+    $verify_cart->execute([$user_id]);
 
     if (isset($_GET['get_id'])) {
-        $get_product = $conn->prepare("SELECT * FROM `products` WHERE id = ? LIMIT 1");
+        $get_product = $conn->prepare("SELECT * FROM `products` WHERE id=? LIMIT 1");
         $get_product->execute([$_GET['get_id']]);
 
         if ($get_product->rowCount() > 0) {
-            $fetch_p = $get_product->fetch(PDO::FETCH_ASSOC);
-            $insert_order = $conn->prepare("INSERT INTO `orders` (id, user_id, name, number, email, address, address_type, method, product_id, price, qty) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $insert_order->execute([
-                uniqid(), $user_id, $name, $phone, $email, $address, $address_type, $payment_method,
-                $fetch_p['id'], $fetch_p['price'], 1
-            ]);
-        }
-    } else {
-        // Place order for all items in the cart
-        $cart_query = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
-        $cart_query->execute([$user_id]);
-
-        while ($cart = $cart_query->fetch(PDO::FETCH_ASSOC)) {
-            $product_query = $conn->prepare("SELECT * FROM `products` WHERE id = ?");
-            $product_query->execute([$cart['product_id']]);
-            $product = $product_query->fetch(PDO::FETCH_ASSOC);
-
-            if ($product) {
-                $insert_order = $conn->prepare("INSERT INTO `orders` (id, user_id, name, number, email, address, address_type, method, product_id, price, qty) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            while ($fetch_p = $get_product->fetch(PDO::FETCH_ASSOC)) {
+                $insert_order = $conn->prepare("INSERT INTO `orders` 
+                (user_id, name, number, email, address, address_type, method, product_id, price, qty) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                
                 $insert_order->execute([
-                    uniqid(), $user_id, $name, $phone, $email, $address, $address_type, $payment_method,
-                    $product['id'], $product['price'], $cart['qty']
+                    $user_id, $name, $number, $email, $address, $address_type, $method,
+                    $fetch_p['id'], $fetch_p['price'], 1
                 ]);
             }
+            header('location:order.php');
+            exit;
+        } else {
+            $warning_msg[] = 'Something went wrong!';
+        }
+    } elseif ($verify_cart->rowCount() > 0) {
+        while ($f_cart = $verify_cart->fetch(PDO::FETCH_ASSOC)) {
+            $insert_order = $conn->prepare("INSERT INTO `orders` 
+            (user_id, name, number, email, address, address_type, method, product_id, price, qty) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            
+            $insert_order->execute([
+                $user_id, $name, $number, $email, $address, $address_type, $method,
+                $f_cart['product_id'], $f_cart['price'], $f_cart['qty']
+            ]);
         }
 
-        // Optionally, clear the cart after placing order
-        $clear_cart = $conn->prepare("DELETE FROM `cart` WHERE user_id = ?");
-        $clear_cart->execute([$user_id]);
-    }
+        // Clear cart after placing order
+        $delete_cart = $conn->prepare("DELETE FROM `cart` WHERE user_id=?");
+        $delete_cart->execute([$user_id]);
 
-    header('location:order.php');
-    exit;
+        header('location:order.php');
+        exit;
+    } else {
+        $warning_msg[] = 'Your cart is empty!';
+    }
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -194,14 +203,14 @@ if (isset($_POST['place_order'])) {
                             }
                         }
                     } else {
-                        $warning_msg[] = "<p>Your cart is empty.</p>";
+                        echo "<p>Your cart is empty.</p>";
                     }
                 }
                 ?>
                 </div>
                <div class="cart-total">
-                        <h3>Total amount to be paid:</h3>
-                        <p>PKR/<?= $grand_total ?>/-</p>
+                    <h3>Total amount to be paid:</h3>
+                    <p>PKR/<?= $grand_total ?>/-</p>
                 </div>
             </div>
         </div>

@@ -101,41 +101,60 @@
     color: var(--green);
     border: 1px solid var(--green);
   }
-  
-  .btn {
-    line-height: 2;
-    background-color: #e0ffcd;
-    padding: 5px 35px;
-    display: inline-block;
-    border-radius: 30px;
-    color: #0f0f0f;
-    text-transform: capitalize;
-    font-family: inherit;
-    font-size: 16px;
-    cursor: pointer;
-    user-select: none;
-    position: relative;
-    overflow: hidden;
-    vertical-align: middle;
-    transition: all 0.3s ease;
-    z-index: 2;
-  }
-  
-  .btn::before{
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 100%;
-    background-color: var(--green);
-    transition: all 0.3s ease;  
-  }
-.btn:hover::before{
-    width: 100%;
-    
-    
-  }
+.btn {
+  position: relative;
+  display: inline-block;
+  padding: 10px 35px;
+  font-size: 16px;
+  font-family: inherit;
+  color: #0f0f0f;
+  background-color: #e0ffcd;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: color 0.3s ease;
+  z-index: 1;
+}
+
+/* animated background */
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background-color: var(--green, #4caf50); /* fallback green */
+  z-index: 0;
+  transition: width 0.3s ease;
+}
+
+/* animate background on hover */
+.btn:hover::before {
+  width: 100%;
+}
+
+/* keep text above the background */
+.btn {
+  position: relative;
+  z-index: 1;
+}
+
+/* highlight text on hover */
+.btn:hover {
+  color: #fff;
+}
+
+/* ensure text stays on top */
+.btn {
+  z-index: 1;
+}
+.btn::before {
+  z-index: -1; /* background stays behind */
+}
+
+
   label {
     text-transform: capitalize;
   }
@@ -1090,7 +1109,7 @@ text-transform: capitalize;
 }
 
 .cart-total .btn:hover {
-    background-color: #218838;
+    background-color:var(--light-green);
 }
 
 
