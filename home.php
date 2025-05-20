@@ -15,6 +15,9 @@ if(isset($_POST['logout'])){
 <style type="text/css">
      <?php include 'Style.css'; ?>
     
+   
+
+
 </style>
 <!DOCTYPE html>
 <html lang="en">
@@ -147,7 +150,7 @@ if(isset($_POST['logout'])){
                     </div>
                 </div>
             </div>
-            <div class="box-container">
+            <div class="box-container" class='image'>
                 <div class="box">
                     <img src="img/card.jpg" alt="">
                     <a href="view_products.php" class='btn'>shop now</a>

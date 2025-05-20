@@ -30,7 +30,7 @@ if (isset($_POST['logout'])) {
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>Green Coffee - Order Page</title>
     <style>
-        .img {
+        .image {
             width: 225px;
             height: 225px;
             object-fit: cover;
