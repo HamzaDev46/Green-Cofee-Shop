@@ -265,6 +265,7 @@ header{
   right: 0;
   box-shadow:  rgb(255, 255, 255/80%);
   box-shadow: var(--box-shadow);
+  background-color: #4caf50;
   border-radius: 0.5rem;
   width: 20rem;
   padding: 1rem;
@@ -1266,7 +1267,125 @@ text-transform: capitalize;
     margin: 0;
 }
 
-/*---------------order---------------*/
+
+/*---------------view_order-section---------------*/
+
+/* ---------- View Order Section ---------- */
+
+.order-detail .box-container {
+    box-shadow: var(--box-shadow);
+    border-radius: 0.5rem;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 1rem auto;
+}
+
+.order-detail .box-container .box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    background: rgba(255, 255, 255, 0.9); /* optional overlay */
+    padding: 2rem;
+    border-radius: 1rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    align-items: flex-start;
+    overflow-x: hidden;
+}
+
+.order-detail .box-container .box .col {
+    flex: 1 1 45%;
+    min-width: 300px;
+    font-size: 1rem;
+}
+
+.order-detail .box-container .box .col .image {
+    height: 17rem;
+    width: 100%;
+    object-fit: fill;
+    margin: 1rem 0;
+}
+
+.order-detail .box-container .box .col .title {
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem 2rem;
+    font-size: 1rem;
+    color: var(--green);
+    background: var(--light-green);
+    border: 2px solid var(--green);
+    display: inline-block;
+    text-transform: capitalize;
+}
+
+.order-detail .box-container .box .col .title i {
+    margin-right: 1rem;
+    color: #000;
+}
+
+.order-detail .box-container .box .col .price {
+    color: crimson;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+    margin-top: -3rem;
+}
+
+.order-detail .box-container .box .col .name {
+    font-size: 1.5rem;
+    color: #000;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.order-detail .box-container .box .col .user {
+    padding: 0.5rem 0;
+    font-size: 1.3rem;
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.order-detail .box-container .box .col .user i {
+    margin-right: 1rem;
+    color: gray;
+}
+
+.order-detail .box-container .box .col .grand-total {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    flex-wrap: wrap;
+    background: var(--light-green);
+    font-size: 1.5rem;
+    color: var(--green);
+    border: 1px solid var(--green);
+    border-radius: 0.5rem;
+    text-transform: capitalize;
+}
+
+.order-detail .box-container .box .col .grand-total span {
+    color: orange;
+}
+
+.order-detail .box-container .box .col .status {
+    font-size: 1.4rem;
+    padding: 0.5rem 0;
+    text-transform: capitalize;
+}
+
+.order-detail .box-container .box .col .btn {
+    width: 100%;
+    border-radius: 0.5rem;
+    border: 1px solid var(--green);
+}
+.icon {
+    margin-right: 0.5rem;
+    color: gray; /* optional */
+}
+
 
 
 /* -------- Footer Section -------- */

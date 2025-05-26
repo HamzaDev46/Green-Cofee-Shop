@@ -14,10 +14,6 @@ if(isset($_POST['logout'])){
 ?>
 <style type="text/css">
      <?php include 'Style.css'; ?>
-    
-   
-
-
 </style>
 <!DOCTYPE html>
 <html lang="en">
