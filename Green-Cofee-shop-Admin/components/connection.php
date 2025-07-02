@@ -5,7 +5,7 @@ $db_password='';
 $conn = new PDO($db_name, $db_user, $db_password);
 
 
-// if ($connection) {
+// if ($conn) {
 //     echo "Connected to the database successfully!";
 // }
 

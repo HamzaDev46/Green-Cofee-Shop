@@ -112,8 +112,8 @@ if (isset($_POST['add_to_cart'])) {
         <section class='view_page'>
             <?php
             if (isset($_GET['pid'])) {
-                $pid                      = $_GET['pid'];
-                $select_products          = $conn->prepare("SELECT * FROM `products` WHERE id = ? LIMIT 1");
+                $pid = $_GET['pid'];
+                $select_products= $conn->prepare("SELECT * FROM `products` WHERE id = ? LIMIT 1");
                 $select_products->execute([$pid]);
                 if ($select_products->rowCount() > 0) {
                     while ($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)) {

@@ -15,7 +15,6 @@ if (isset($_POST['place_order'])) {
     $name = filter_var($_POST['name'], FILTER_UNSAFE_RAW);
     $number = filter_var($_POST['phone'], FILTER_UNSAFE_RAW);
     $email = filter_var($_POST['email'], FILTER_UNSAFE_RAW);
-
     $address = filter_var($_POST['flat'] . ', ' . $_POST['street'] . ', ' . $_POST['city'] . ', ' . $_POST['state'] . ' - ' . $_POST['zip'], FILTER_UNSAFE_RAW);
     $address_type = filter_var($_POST['address_type'], FILTER_UNSAFE_RAW);
     $method = filter_var($_POST['payment_method'], FILTER_UNSAFE_RAW);
@@ -55,7 +54,6 @@ if (isset($_POST['place_order'])) {
             ]);
         }
 
-        // Clear cart after placing order
         $delete_cart = $conn->prepare("DELETE FROM `cart` WHERE user_id=?");
         $delete_cart->execute([$user_id]);
 
@@ -66,8 +64,6 @@ if (isset($_POST['place_order'])) {
     }
 }
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -106,7 +102,7 @@ if (isset($_POST['place_order'])) {
                         </div>
                         <div class="input-feld">
                             <p>Your Phone <span>*</span></p>
-                            <input type="tel" name="phone" required maxlength='15' placeholder="Enter your phone number" class="input">
+                            <input type="tel" name="phone" required maxlength='11' placeholder="11-digit phone number" class="input">
                         </div>
                         <div class="input-feld">
                             <p>Payment Method <span>*</span></p>
@@ -218,6 +214,68 @@ if (isset($_POST['place_order'])) {
 
     <?php include 'components/footer.php'; ?>
 </div>
+
+<script>
+document.querySelector("form").addEventListener("submit", function(e) {
+    const form = e.target;
+    let isValid = true;
+    let messages = [];
+
+    const phonePattern = /^\d{11}$/; // 11 digits only
+    const zipPattern = /^\d{4,6}$/;
+
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const phone = form.phone.value.trim();
+    const payment = form.payment_method.value;
+    const addressType = form.address_type.value;
+    const flat = form.flat.value.trim();
+    const street = form.street.value.trim();
+    const city = form.city.value.trim();
+    const state = form.state.value.trim();
+    const zip = form.zip.value.trim();
+
+    if (name.length < 2) {
+        isValid = false;
+        messages.push("Name must be at least 2 characters.");
+    }
+
+    if (!email.includes("@")) {
+        isValid = false;
+        messages.push("Enter a valid email.");
+    }
+
+    if (!phonePattern.test(phone)) {
+        isValid = false;
+        messages.push("Phone number must be exactly 11 digits.");
+    }
+
+    if (!payment) {
+        isValid = false;
+        messages.push("Please select a payment method.");
+    }
+
+    if (!addressType) {
+        isValid = false;
+        messages.push("Please select an address type.");
+    }
+
+    if (!flat || !street || !city || !state || !zip) {
+        isValid = false;
+        messages.push("All address fields are required.");
+    }
+
+    if (!zipPattern.test(zip)) {
+        isValid = false;
+        messages.push("ZIP code must be between 4 and 6 digits.");
+    }
+
+    if (!isValid) {
+        e.preventDefault();
+        alert(messages.join("\n"));
+    }
+});
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script src="script.js" defer></script>

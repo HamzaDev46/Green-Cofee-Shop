@@ -250,6 +250,6 @@ if(isset($_POST['logout'])){
     <!-- Scripts at the bottom for better performance -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script src="script.js" defer></script>
-    <?php include 'components/alert.php'; ?>
+    <?php include './Components/alert.php'; ?>
 </body>
 </html>

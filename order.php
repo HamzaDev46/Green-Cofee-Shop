@@ -233,7 +233,7 @@ if (isset($_POST['logout'])) {
                             <img src="img/<?= $fetch_product['image']; ?>" class="image">
                             <div class="row">
                                 <h3 class="name"><?= $fetch_product['name']; ?></h3>
-                                <p class="price">Price : $<?= $fetch_order['price']; ?> x <?= $fetch_order['qty']; ?></p>
+                                <p class="price">Price : Rs<?= $fetch_order['price']; ?> x <?= $fetch_order['qty']; ?></p>
                                 <p class="status" style="color:<?php if($fetch_order['status']=='delivered'){ echo 'green';}elseif($fetch_order['status']=='canceled'){echo 'red';}else{ echo 'orange';} ?>"><?= $fetch_order['status']; ?></p>
                             </div>
                         </a>
