@@ -205,3 +205,360 @@ section,
     border-radius: 20px;
     margin: 30px 10px;
 }
+
+/*header*/
+/* admin_style.css - Fixed Version */
+:root {
+    --green: #27ae60;
+    --light-green: #2ecc71;
+    --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+header {
+    position: fixed;
+    top: 5%;
+    left: 7%;
+    width: 85vw;
+    padding: 1rem;
+    z-index: 101;
+    transition: all 0.3s ease;
+    box-shadow: var(--box-shadow);
+    background-image: url('../img/body-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+}
+
+header.scrolled {
+    top: 0;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    background-image: none;
+    background-color:var(--green);
+}
+
+header.scrolled a:hover {
+    color: var(--green);
+}
+
+.flex {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.logo img {
+    height: 40px;
+    width: auto;
+    border-radius: 8px;
+}
+
+.navbar {
+    display: flex;
+}
+
+.navbar a {
+    margin: 0 1rem;
+    font-size: 1.2rem;
+    color: #000;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: var(--green);
+}
+
+/* Header icons */
+.header .icons {
+    display: flex;
+    align-items: center;
+}
+
+.header .icons i {
+    margin-left: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #000;
+    transition: color 0.3s ease;
+}
+
+.header .icons i:hover {
+    color: var(--black);
+}
+
+/* Hide menu button by default */
+#menu-btn {
+    display: none;
+}
+
+/* Profile dropdown */
+.header .profile-detail {
+    position: absolute;
+    top: 125%;
+    right: 0;
+    width: 22rem;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 0.5rem;
+    box-shadow: var(--box-shadow);
+    display: none;
+    text-align: center;
+    overflow: hidden;
+    z-index: 102;
+    animation: fadeIn 0.2s linear;
+}
+
+/* Profile dropdown animation */
+@keyframes fadeIn {
+    0% {
+        transform: translateY(1rem);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.profile-detail.active {
+    display: block;
+}
+
+.profile-detail p {
+    padding-bottom: 0.7rem;
+    font-size: 1.5rem;
+    text-transform: capitalize;
+    color: var(--light-green);
+}
+
+.profile-detail img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    padding: 0.5rem;
+    border: 3px solid var(--green);
+    object-fit: cover;
+}
+
+.flex-btn {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 1rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.7rem 1.5rem;
+    background: var(--green);
+    color: #fff;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    text-transform: capitalize;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background: var(--light-green);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/*---media screen---*/
+@media (max-width: 1200px) {
+    header {
+        left: 5%;
+        width: 90vw;
+    }
+    
+    .navbar a {
+        margin: 0 0.8rem;
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 991px) {
+    header {
+        left: 2.5%;
+        width: 95vw;
+        top: 2%;
+    }
+    
+    #menu-btn {
+        display: block;
+        z-index: 103;
+    }
+    
+    .navbar {
+        position: absolute;
+        width: 100%;
+        padding: 2rem;
+        top: 100%;
+        left: 0;
+        right: 0;
+        border-top: 1px solid var(--green);
+        background: #fff;
+        transition: all 0.3s ease;
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        border-radius: 0 0 12px 12px;
+        z-index: 100;
+        flex-direction: column;
+        display: none;
+    }
+    
+    .navbar.active {
+        display: flex;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    
+    .navbar a {
+        display: block;
+        margin: 1rem 0;
+        text-align: center;
+        padding: 0.8rem;
+        border-bottom: 1px solid #f1f1f1;
+        width: 100%;
+    }
+    
+    .navbar a:last-child {
+        border-bottom: none;
+    }
+    
+    .profile-detail {
+        width: 90%;
+        right: 5%;
+    }
+    
+    .profile-detail img {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    .logo img {
+        height: 35px;
+    }
+    
+    .navbar a {
+        font-size: 1rem;
+    }
+    
+    .header .icons i {
+        font-size: 1.3rem;
+        margin-left: 0.8rem;
+    }
+    
+    .profile-detail {
+        width: 95%;
+        right: 2.5%;
+    }
+    
+    .flex-btn {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn {
+        width: 80%;
+        margin: 0.3rem 0;
+    }
+}
+
+@media (max-width: 576px) {
+    header {
+        padding: 0.8rem;
+    }
+    
+    .logo img {
+        height: 30px;
+    }
+    
+    .header .icons i {
+        font-size: 1.2rem;
+        margin-left: 0.5rem;
+    }
+    
+    .profile-detail {
+        padding: 1rem;
+    }
+    
+    .profile-detail img {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .profile-detail p {
+        font-size: 1.2rem;
+    }
+    
+    .navbar {
+        padding: 1rem;
+    }
+    
+    .navbar a {
+        margin: 0.8rem 0;
+        font-size: 0.9rem;
+    }
+}
+
+.flex-btn .btn{
+    margin: .5rem;
+}
+.banner{
+    background-image: url('../img/banner.jpg');
+    background-size: cover;
+    background-position: center;
+    background-color: var(--green);
+    width: 100%;
+    height: 50vh;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner h1{
+    text-transform: uppercase;
+    color: #fff;
+    margin-left: 3rem;
+}
+
+.title2{
+    border-top: 1px solid var(--green);
+    padding: 1rem 2rem;
+    text-transform: uppercase;
+    box-shadow: var(--box-shadow);
+}
+.title2 a{
+    color: var(--green);
+}
+.dashboard .box-container .box{
+    text-align: center;
+    box-shadow: var(--box-shadow);
+    border-radius: .5rem;
+    text-align: center;
+    padding: 1.5rem;
+    padding-bottom: 3rem;
+
+} 
+.dashboard .box-container .box h3{
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+.dashboard .box-container .box p{
+    font-size: 1.7rem;
+    margin: 1rem 0;
+    text-transform: capitalize;
+    color: #3a2e2e;
+}

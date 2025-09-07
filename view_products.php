@@ -126,43 +126,43 @@ if (isset($_POST['add_to_cart'])) {
     </div>
 
     <section class='products'>
-        <div class="box-container">
-            <?php
-            $select_products = $conn->prepare("SELECT * FROM `products`");
-            $select_products->execute();
-            if ($select_products->rowCount() > 0) {
-                while ($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)) {
-                    ?>
-                    <form action="" method="post" class="box">
-                        <img src="img/<?= $fetch_product['image']; ?>" alt="" class="img">
-                        <div class="button">
-                            <?php if ($user_id != ''): ?>
-                                <button type='submit' name='add_to_cart'><i class='bx bx-cart'></i></button>
-                                <button type='submit' name='add_to_wishlist'><i class='bx bx-heart'></i></button>
-                            <?php else: ?>
-                                <a href="login.php" class='bx bx-cart'></a>
-                                <a href="login.php" class='bx bx-heart'></a>
-                            <?php endif; ?>
-                            <a href="view_page.php?pid=<?= $fetch_product['id']; ?>" class='bx bxs-show'></a>
-                        </div>
-                        <h3 class='name'><?= $fetch_product['name']; ?></h3>
-                        <input type="hidden" name="product_id" value="<?= $fetch_product['id']; ?>">
-                        <div class="flex">
-                            <p class="price">price Rs<?= $fetch_product['price']; ?>/-</p>
-                            <input type="number" name="qty" min="1" max="99" value="1" class="qty" maxlength="2" required>
-
-                        </div>
-                        <a href="checkout.php?get_id=<?= $fetch_product['id']; ?>" class='btn'>buy now</a>
-                    </form>
-                    <?php
-                }
-            } else {
-                echo '<p class="empty">no products added yet!</p>';
+    <div class="box-container">
+        <?php
+        $select_products = $conn->prepare("SELECT * FROM `products` WHERE status = 'active'");
+        $select_products->execute();
+        if ($select_products->rowCount() > 0) {
+            while ($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)) {
+                ?>
+                <form action="" method="post" class="box">
+                    <img src="img/<?= $fetch_product['image']; ?>" alt="" class="img">
+                    <div class="button">
+                        <?php if ($user_id != ''): ?>
+                            <button type='submit' name='add_to_cart'><i class='bx bx-cart'></i></button>
+                            <button type='submit' name='add_to_wishlist'><i class='bx bx-heart'></i></button>
+                        <?php else: ?>
+                            <a href="login.php" class='bx bx-cart'></a>
+                            <a href="login.php" class='bx bx-heart'></a>
+                        <?php endif; ?>
+                        <a href="view_page.php?pid=<?= $fetch_product['id']; ?>" class='bx bxs-show'></a>
+                    </div>
+                    <h3 class='name'><?= $fetch_product['name']; ?></h3>
+                    <input type="hidden" name="product_id" value="<?= $fetch_product['id']; ?>">
+                    <div class="flex">
+                        <p class="price">price Rs<?= $fetch_product['price']; ?>/-</p>
+                        <input type="number" name="qty" min="1" max="99" value="1" class="qty" maxlength="2" required>
+                    </div>
+                    <a href="checkout.php?get_id=<?= $fetch_product['id']; ?>" class='btn'>buy now</a>
+                </form>
+                <?php
             }
-            ?>
-        </div>
-        <?php include 'components/footer.php'; ?>
-    </section>
+        } else {
+            echo '<p class="empty">no products available yet!</p>';
+        }
+        ?>
+    </div>
+    <?php include 'components/footer.php'; ?>
+</section>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script src="script.js" defer></script>
