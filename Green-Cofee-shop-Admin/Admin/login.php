@@ -16,7 +16,9 @@
         $select_admin->execute([$email, $pass]);
 
         if ($select_admin->rowCount() > 0) {
-            $_SESSION['admin_id'] = $select_admin->fetchColumn();
+            $fetch_admin = $select_admin->fetch(PDO::FETCH_ASSOC);
+            $_SESSION['admin_id'] = $fetch_admin['id']; // store correct admin ID
+
             header('location: dashboard.php');
             exit;
         } else {

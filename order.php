@@ -160,7 +160,7 @@ if (isset($_POST['logout'])) {
             background: #e0f2f1;
             display: inline-block;
         }
-        .box .status[style*="green"] {
+        /* .box .status[style*="green"] {
             background: #e8f5e9;
             color: #388e3c !important;
         }
@@ -171,7 +171,7 @@ if (isset($_POST['logout'])) {
         .box .status[style*="orange"] {
             background: #fff3e0;
             color: #f57c00 !important;
-        }
+        } */
         .empty {
             text-align: center;
             color: #757575;

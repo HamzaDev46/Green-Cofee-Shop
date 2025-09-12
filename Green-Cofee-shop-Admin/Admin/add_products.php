@@ -9,8 +9,6 @@ if (!isset($admin_id)) {
 
 // add product in database
 if (isset($_POST['submit'])) {
-    $id = unique_id();
-
     $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
     $price = htmlspecialchars($_POST['price'], ENT_QUOTES, 'UTF-8');
     $content = htmlspecialchars($_POST['content'], ENT_QUOTES, 'UTF-8');
@@ -39,15 +37,15 @@ if (isset($_POST['submit'])) {
     }
 
     if (!isset($warning_msg)) {
-        $insert_product = $conn->prepare("INSERT INTO `products` (id, name, price, image, product_detail, status) VALUES(?,?,?,?,?,?)");
-        $insert_product->execute([$id, $name, $price, $image, $content, $status]);
+        $insert_product = $conn->prepare("INSERT INTO `products` 
+            (name, price, image, product_detail, status) VALUES(?,?,?,?,?)");
+        $insert_product->execute([$name, $price, $image, $content, $status]);
         $success_msg[] = 'Product published successfully!';
     }
 }
-//save as draft
-if (isset($_POST['draft'])) {
-    $id = unique_id();
 
+// save as draft
+if (isset($_POST['draft'])) {
     $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
     $price = htmlspecialchars($_POST['price'], ENT_QUOTES, 'UTF-8');
     $content = htmlspecialchars($_POST['content'], ENT_QUOTES, 'UTF-8');
@@ -76,14 +74,13 @@ if (isset($_POST['draft'])) {
     }
 
     if (!isset($warning_msg)) {
-        $insert_product = $conn->prepare("INSERT INTO `products` (id, name, price, image, product_detail, status) VALUES(?,?,?,?,?,?)");
-        $insert_product->execute([$id, $name, $price, $image, $content, $status]);
+        $insert_product = $conn->prepare("INSERT INTO `products` 
+            (name, price, image, product_detail, status) VALUES(?,?,?,?,?)");
+        $insert_product->execute([$name, $price, $image, $content, $status]);
         $success_msg[] = 'Product saved as draft!';
     }
 }
-
 ?>
- 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -92,7 +89,7 @@ if (isset($_POST['draft'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" type="text/css" href="admin_style.css?v=<? echo time(); ?>">
+    <link rel="stylesheet" type="text/css" href="admin_style.css?v=<?php echo time(); ?>">
     <title>Green Coffee - Admin panel - Add Products</title>
 </head>
 
@@ -115,16 +112,15 @@ if (isset($_POST['draft'])) {
                 </div>
                 <div class="input-field">
                     <label>product price <sup>*</sup></label>
-                    <input type="number" name="price" maxlength="100" required placeholder="add product name">
+                    <input type="number" name="price" maxlength="100" required placeholder="add product price">
                 </div>
                 <div class="input-field">
                     <label>product detail <sup>*</sup></label>
-                    <textarea name="content" required maxlength="10000" required
-                        placeholder="write product description"></textarea>
+                    <textarea name="content" required maxlength="10000" placeholder="write product description"></textarea>
                 </div>
                 <div class="input-field">
                     <label>product image <sup>*</sup></label>
-                    <input type="file" name="image" required accept="image/*" required>
+                    <input type="file" name="image" required accept="image/*">
                 </div>
                 <div class="flex-btn">
                     <button type="submit" name="submit" class="btn">publish product</button>
@@ -134,11 +130,9 @@ if (isset($_POST['draft'])) {
         </section>
     </div>
 
-
-    <!-- Scripts at the bottom for better performance -->
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script type="text/javascript" src="script.js"></script>
     <?php include '../components/alert.php'; ?>
 </body>
-
 </html>
